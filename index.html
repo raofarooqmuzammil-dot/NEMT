@@ -753,6 +753,8 @@
   </a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
+    <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#map-section">Map</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#book">Book a Ride</a></li>
     <li><a href="#contact" class="nav-cta">Contact Us</a></li>
@@ -769,7 +771,7 @@
     <p class="hero-sub">Professional non-emergency medical transportation for dialysis, doctor appointments, therapy, and more. On-time, door-to-door, and always caring.</p>
     <div class="hero-actions">
       <a href="#book" class="btn-primary">📅 &nbsp;Book a Ride</a>
-      <a href="tel:+18005550100" class="btn-outline">📞 &nbsp;Call Dispatch</a>
+      <button class="btn-outline" onclick="showPhoneModal()" style="border:none;cursor:pointer;">📞 &nbsp;Call Dispatch</button>
     </div>
     <div class="hero-stats">
       <div class="hero-stat">
@@ -867,6 +869,59 @@
       <div class="service-icon">🏛️</div>
       <h3>Facility Contracts</h3>
       <p>Volume agreements for assisted living centers, hospitals, and rehab facilities. Priority dispatch and dedicated accounts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section id="coverage" style="background:var(--navy);padding:100px 5%;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,180,160,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,160,0.04) 1px,transparent 1px);background-size:40px 40px;"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="section-label">Service Coverage</div>
+    <h2 style="color:var(--cream);">Proudly serving <em>Southeast Michigan</em></h2>
+    <p class="section-sub" style="color:var(--light-slate);margin-bottom:56px;">Based in Michigan, we provide reliable non-emergency medical transport across these communities — with local drivers who know every route.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🏙️</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Detroit</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Full city coverage including hospital districts, clinics, and dialysis centers throughout Metro Detroit.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🌆</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Dearborn</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Serving Dearborn and Dearborn Heights with multilingual drivers familiar with local medical facilities.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🏘️</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Livonia</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Complete coverage across Livonia including St. Mary Mercy Hospital and surrounding care centers.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🍁</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Ann Arbor</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Dedicated routes to University of Michigan Health and other major Ann Arbor medical campuses.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🏡</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Canton</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Reliable transport throughout Canton Township to local clinics, specialists, and therapy centers.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🌳</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Farmington Hills</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Serving Farmington Hills and Farmington with prompt pickup and experienced care-focused drivers.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🌊</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Monroe</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Extended service to Monroe County, connecting patients to regional hospitals and specialty care.</p>
+      </div>
+      <div class="coverage-card" style="background:rgba(0,180,160,0.08);border:1px solid rgba(0,180,160,0.3);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:14px;">📍</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--teal);font-size:1.1rem;margin-bottom:8px;">Don't see your city?</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;margin-bottom:16px;">We may still be able to help. Call us and we'll check availability in your area.</p>
+        <button onclick="showPhoneModal()" class="btn-primary" style="font-size:0.85rem;padding:10px 22px;border:none;cursor:pointer;">📞 Call Us</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1030,6 +1085,9 @@
       <button class="form-submit" onclick="submitBooking()">
         📅 &nbsp; Request My Ride
       </button>
+      <button class="form-submit" onclick="openPaymentModal()" style="margin-top:10px;background:var(--teal);color:var(--navy);">
+        💳 &nbsp; Pay for Ride
+      </button>
       <p class="form-note">🔒 Your information is protected under HIPAA. We never share your data.</p>
     </div>
   </div>
@@ -1046,7 +1104,7 @@
         <div class="contact-channel-icon">📞</div>
         <div>
           <h4>Main Dispatch Line</h4>
-          <p>1-800-555-0100</p>
+          <p>+92 304 847 1034</p>
           <small>Available 24 hours, 7 days a week</small>
         </div>
       </div>
@@ -1054,7 +1112,7 @@
         <div class="contact-channel-icon">💬</div>
         <div>
           <h4>SMS / Text</h4>
-          <p>Text RIDE to 55500</p>
+          <p>+92 304 847 1034</p>
           <small>For scheduling and ride status updates</small>
         </div>
       </div>
@@ -1062,7 +1120,7 @@
         <div class="contact-channel-icon">📧</div>
         <div>
           <h4>Email</h4>
-          <p>dispatch@clearpathNEMT.com</p>
+          <p>earninn@gmail.com</p>
           <small>Billing, contracts & facility inquiries</small>
         </div>
       </div>
@@ -1070,7 +1128,7 @@
         <div class="contact-channel-icon">🏢</div>
         <div>
           <h4>Main Office</h4>
-          <p>4800 Medical Center Drive, Ste. 200</p>
+          <p>Michigan, United States</p>
           <small>Mon–Fri, 8:00 AM – 6:00 PM</small>
         </div>
       </div>
@@ -1078,7 +1136,7 @@
         <div class="contact-channel-icon">🤝</div>
         <div>
           <h4>Facility Partnerships</h4>
-          <p>contracts@clearpathNEMT.com</p>
+          <p>earninn@gmail.com</p>
           <small>Volume pricing and API integrations</small>
         </div>
       </div>
@@ -1178,7 +1236,264 @@
 <!-- Toast -->
 <div id="success-toast">✅ &nbsp; <span id="toast-msg">Request submitted! We'll confirm shortly.</span></div>
 
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GOOGLE MAP SECTION -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="map-section" style="padding:0;background:var(--cream);">
+  <div style="padding:80px 5% 40px;">
+    <div class="section-label">Find Us</div>
+    <h2>Our <em>service area</em> — Southeast Michigan</h2>
+    <p class="section-sub">We operate throughout the greater Detroit metro area. Use the map to explore our coverage zones.</p>
+  </div>
+  <div style="width:100%;height:480px;position:relative;">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d375612.4!2d-83.4!3d42.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8824ca0110cb1d75%3A0x5776864e35b9c4d2!2sDetroit%2C%20MI!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+      width="100%" height="480" style="border:0;display:block;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <div style="position:absolute;top:20px;left:20px;background:white;border-radius:14px;padding:16px 20px;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:220px;">
+      <div style="font-weight:700;font-size:0.85rem;color:var(--navy);margin-bottom:10px;">📍 Coverage Cities</div>
+      <div style="font-size:0.78rem;color:var(--slate);line-height:1.9;">
+        🏙️ Detroit &nbsp;|&nbsp; 🏘️ Dearborn<br>
+        🌳 Livonia &nbsp;|&nbsp; 🍁 Ann Arbor<br>
+        🏡 Canton &nbsp;|&nbsp; 🌲 Farmington Hills<br>
+        🌊 Monroe
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHONE MODAL -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="phone-modal" style="display:none;position:fixed;inset:0;background:rgba(11,31,58,0.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+  <div style="background:white;border-radius:24px;padding:48px 40px;max-width:380px;width:90%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.3);position:relative;animation:fadeUp 0.3s ease;">
+    <button onclick="closePhoneModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--slate);">×</button>
+    <div style="font-size:3rem;margin-bottom:16px;">📞</div>
+    <h3 style="font-family:'Libre Baskerville',serif;font-size:1.4rem;margin-bottom:8px;color:var(--navy);">Call Our Dispatch</h3>
+    <p style="color:var(--slate);font-size:0.875rem;margin-bottom:24px;">Available 24 hours, 7 days a week</p>
+    <div style="background:var(--cream);border-radius:14px;padding:20px;margin-bottom:24px;">
+      <div style="font-size:1.8rem;font-weight:700;color:var(--navy);letter-spacing:0.02em;">+92 304 847 1034</div>
+      <div style="font-size:0.78rem;color:var(--slate);margin-top:6px;">Tap to copy or dial</div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <button onclick="copyPhone()" style="flex:1;padding:13px;border-radius:100px;background:var(--navy);color:white;border:none;font-weight:600;cursor:pointer;font-family:inherit;font-size:0.9rem;transition:background 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='var(--navy)'" onmouseout="this.style.background='var(--navy)';this.style.color='white'">📋 Copy Number</button>
+      <a href="tel:+923048471034" style="flex:1;padding:13px;border-radius:100px;background:var(--teal);color:var(--navy);text-decoration:none;font-weight:600;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background='#00d4bc'" onmouseout="this.style.background='var(--teal)'">📱 Dial Now</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAYMENT MODAL -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="payment-modal" style="display:none;position:fixed;inset:0;background:rgba(11,31,58,0.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="background:white;border-radius:24px;padding:44px 40px;max-width:480px;width:90%;box-shadow:0 30px 80px rgba(0,0,0,0.3);position:relative;animation:fadeUp 0.3s ease;margin:20px auto;">
+    <button onclick="closePaymentModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--slate);">×</button>
+    <div style="font-size:2.5rem;margin-bottom:12px;">💳</div>
+    <h3 style="font-family:'Libre Baskerville',serif;font-size:1.4rem;margin-bottom:6px;color:var(--navy);">Secure Payment</h3>
+    <p style="color:var(--slate);font-size:0.85rem;margin-bottom:28px;">Pay for your ride securely. All transactions are encrypted.</p>
+
+    <div style="background:var(--cream);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:0.8rem;color:var(--slate);">Ride Estimate</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--navy);" id="ride-total">$28.00</div>
+    </div>
+
+    <div class="form-group">
+      <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Cardholder Name</label>
+      <input type="text" id="pay-name" placeholder="Jane Doe" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'">
+    </div>
+    <div class="form-group" style="margin-top:14px;">
+      <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Card Number</label>
+      <input type="text" id="pay-card" placeholder="1234 5678 9012 3456" maxlength="19" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'" oninput="formatCard(this)">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+      <div>
+        <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Expiry</label>
+        <input type="text" id="pay-exp" placeholder="MM / YY" maxlength="7" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'" oninput="formatExpiry(this)">
+      </div>
+      <div>
+        <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">CVV</label>
+        <input type="text" id="pay-cvv" placeholder="123" maxlength="4" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'">
+      </div>
+    </div>
+    <div style="background:rgba(0,180,160,0.06);border:1px solid rgba(0,180,160,0.2);border-radius:10px;padding:12px 16px;margin-top:18px;font-size:0.78rem;color:var(--slate);display:flex;align-items:center;gap:8px;">
+      🔒 Your payment info is encrypted and never stored on our servers.
+    </div>
+    <button onclick="processPayment()" style="width:100%;margin-top:20px;padding:16px;border-radius:100px;background:var(--navy);color:white;font-size:1rem;font-weight:600;font-family:inherit;border:none;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='var(--navy)'" onmouseout="this.style.background='var(--navy)';this.style.color='white'">
+      💳 &nbsp;Pay Securely
+    </button>
+    <p style="text-align:center;font-size:0.75rem;color:var(--light-slate);margin-top:12px;">Visa · Mastercard · Amex · Discover accepted</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- CHATBOT -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="chat-bubble" onclick="toggleChat()" style="position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 30px rgba(0,180,160,0.4);z-index:1500;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <span id="chat-icon">💬</span>
+  <div id="chat-notif" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#e74c3c;border-radius:50%;border:2px solid white;font-size:0.6rem;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;">1</div>
+</div>
+
+<div id="chat-window" style="display:none;position:fixed;bottom:100px;right:30px;width:360px;height:520px;background:white;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.2);z-index:1500;flex-direction:column;overflow:hidden;animation:fadeUp 0.3s ease;">
+  <!-- Chat Header -->
+  <div style="background:var(--navy);padding:18px 20px;display:flex;align-items:center;gap:12px;">
+    <div style="width:40px;height:40px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🚐</div>
+    <div style="flex:1;">
+      <div style="color:white;font-weight:600;font-size:0.95rem;">ClearPath Assistant</div>
+      <div style="color:var(--teal);font-size:0.75rem;display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;background:var(--teal);border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;"></span>Online now</div>
+    </div>
+    <button onclick="toggleChat()" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.3rem;cursor:pointer;">×</button>
+  </div>
+  <!-- Chat Messages -->
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--warm-white);">
+    <div class="bot-msg" style="display:flex;gap:10px;align-items:flex-start;">
+      <div style="width:30px;height:30px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;">🚐</div>
+      <div style="background:white;border:1px solid rgba(11,31,58,0.08);border-radius:4px 16px 16px 16px;padding:12px 16px;font-size:0.875rem;color:var(--navy);max-width:80%;box-shadow:0 2px 8px rgba(0,0,0,0.06);line-height:1.5;">
+        Hi! 👋 I'm the ClearPath assistant. I can help you with booking, pricing, coverage areas, and more. What do you need?
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-left:40px;">
+      <button onclick="quickReply('What areas do you cover?')" style="background:white;border:1px solid rgba(0,180,160,0.3);border-radius:100px;padding:7px 14px;font-size:0.78rem;color:var(--teal);cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--teal)'">📍 Coverage areas</button>
+      <button onclick="quickReply('What are your prices?')" style="background:white;border:1px solid rgba(0,180,160,0.3);border-radius:100px;padding:7px 14px;font-size:0.78rem;color:var(--teal);cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--teal)'">💰 Pricing</button>
+      <button onclick="quickReply('How do I book a ride?')" style="background:white;border:1px solid rgba(0,180,160,0.3);border-radius:100px;padding:7px 14px;font-size:0.78rem;color:var(--teal);cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--teal)'">📅 Book a ride</button>
+    </div>
+  </div>
+  <!-- Chat Input -->
+  <div style="padding:14px 16px;border-top:1px solid rgba(11,31,58,0.08);display:flex;gap:10px;background:white;">
+    <input id="chat-input" type="text" placeholder="Type your question…" style="flex:1;padding:10px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:100px;font-size:0.875rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'" onkeypress="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()" style="width:40px;height:40px;background:var(--teal);border:none;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;">➤</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAY RIDE BUTTON (floating near book section) -->
+<!-- ═══════════════════════════════════════════════ -->
+
 <script>
+  // ── PHONE MODAL ──
+  function showPhoneModal() {
+    const m = document.getElementById('phone-modal');
+    m.style.display = 'flex';
+  }
+  function closePhoneModal() {
+    document.getElementById('phone-modal').style.display = 'none';
+  }
+  function copyPhone() {
+    navigator.clipboard.writeText('+923048471034').then(() => {
+      toast('📋 Phone number copied to clipboard!');
+      closePhoneModal();
+    });
+  }
+  document.getElementById('phone-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePhoneModal();
+  });
+
+  // ── PAYMENT MODAL ──
+  function openPaymentModal() {
+    document.getElementById('payment-modal').style.display = 'flex';
+  }
+  function closePaymentModal() {
+    document.getElementById('payment-modal').style.display = 'none';
+  }
+  document.getElementById('payment-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePaymentModal();
+  });
+  function formatCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 2) v = v.substring(0, 2) + ' / ' + v.substring(2);
+    input.value = v;
+  }
+  function processPayment() {
+    const name = document.getElementById('pay-name').value.trim();
+    const card = document.getElementById('pay-card').value.trim();
+    const exp  = document.getElementById('pay-exp').value.trim();
+    const cvv  = document.getElementById('pay-cvv').value.trim();
+    if (!name || card.length < 19 || exp.length < 7 || cvv.length < 3) {
+      toast('⚠️ Please fill in all payment fields correctly.');
+      return;
+    }
+    closePaymentModal();
+    toast('✅ Payment successful! Booking confirmed.');
+  }
+
+  // ── CHATBOT ──
+  const botReplies = {
+    'what areas do you cover': '📍 We cover: <b>Detroit, Dearborn, Livonia, Ann Arbor, Canton, Farmington Hills,</b> and <b>Monroe</b> — all in Southeast Michigan!',
+    'coverage': '📍 We serve Detroit, Dearborn, Livonia, Ann Arbor, Canton, Farmington Hills, and Monroe, MI.',
+    'price': '💰 Standard rides start at <b>$3.50/mile</b> (min $18). Priority service is <b>$5.25/mile</b> (min $28). Facility contracts are custom-priced.',
+    'pricing': '💰 Standard: $3.50/mile · Priority: $5.25/mile · Facility: custom rates. All include licensed drivers and GPS tracking!',
+    'book': '📅 You can book online using the form on this page, or call us at <b>+92 304 847 1034</b>. We confirm within 30 minutes!',
+    'how do i book': '📅 Scroll up to the <b>Book a Ride</b> section and fill out the form — or call <b>+92 304 847 1034</b>!',
+    'phone': '📞 Our dispatch number is <b>+92 304 847 1034</b>, available 24/7.',
+    'number': '📞 Call us at <b>+92 304 847 1034</b> anytime — we\'re available 24 hours a day!',
+    'email': '📧 You can reach us at <b>earninn@gmail.com</b> for billing and inquiries.',
+    'wheelchair': '♿ Yes! We have ADA-compliant vehicles with hydraulic lifts and secure tie-downs for wheelchair users.',
+    'insurance': '🧾 We accept <b>Medicaid and Medicare</b>. We handle billing directly — no upfront payment needed for eligible rides.',
+    'medicaid': '🧾 Yes, we accept Medicaid! We bill directly on your behalf. Just provide your member ID when booking.',
+    'dialysis': '💊 We offer dedicated dialysis transport with consistent, familiar drivers. We can set up a recurring schedule for you.',
+    'hours': '🕐 Our dispatch is available <b>24/7</b>, including weekends and holidays.',
+    'michigan': '📍 Yes, we\'re based in Michigan and cover Southeast Michigan cities including Detroit, Dearborn, Ann Arbor, and more.',
+    'pay': '💳 You can pay by card using our secure payment form. Click the <b>Pay for Ride</b> button in the booking section.',
+    'payment': '💳 We accept Visa, Mastercard, Amex, and Discover. Insurance billing also available for eligible patients.',
+    'hello': '👋 Hello! How can I help you today? Ask me about pricing, coverage, booking, or anything else!',
+    'hi': '👋 Hi there! I\'m here to help. Ask me about our services, pricing, or how to book a ride.',
+    'default': '🤔 I\'m not sure about that — please call us at <b>+92 304 847 1034</b> or email <b>earninn@gmail.com</b> and we\'ll be happy to help!'
+  };
+
+  function getBotReply(msg) {
+    const lower = msg.toLowerCase();
+    for (const key in botReplies) {
+      if (lower.includes(key)) return botReplies[key];
+    }
+    return botReplies['default'];
+  }
+
+  function addMsg(text, isUser) {
+    const msgs = document.getElementById('chat-messages');
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `display:flex;gap:10px;align-items:flex-start;${isUser ? 'flex-direction:row-reverse;' : ''}`;
+    const avatar = document.createElement('div');
+    avatar.style.cssText = `width:30px;height:30px;background:${isUser ? 'var(--teal)' : 'var(--navy)'};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;`;
+    avatar.textContent = isUser ? '👤' : '🚐';
+    const bubble = document.createElement('div');
+    bubble.style.cssText = `background:${isUser ? 'var(--teal)' : 'white'};color:${isUser ? 'var(--navy)' : 'var(--navy)'};border:1px solid ${isUser ? 'var(--teal)' : 'rgba(11,31,58,0.08)'};border-radius:${isUser ? '16px 4px 16px 16px' : '4px 16px 16px 16px'};padding:12px 16px;font-size:0.875rem;max-width:80%;box-shadow:0 2px 8px rgba(0,0,0,0.06);line-height:1.5;`;
+    bubble.innerHTML = text;
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(bubble);
+    msgs.appendChild(wrapper);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function quickReply(text) {
+    addMsg(text, true);
+    document.getElementById('chat-notif').style.display = 'none';
+    setTimeout(() => addMsg(getBotReply(text), false), 600);
+  }
+
+  function sendChat() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addMsg(msg, true);
+    input.value = '';
+    document.getElementById('chat-notif').style.display = 'none';
+    setTimeout(() => addMsg(getBotReply(msg), false), 700);
+  }
+
+  function toggleChat() {
+    const w = document.getElementById('chat-window');
+    const isOpen = w.style.display === 'flex';
+    w.style.display = isOpen ? 'none' : 'flex';
+    w.style.flexDirection = 'column';
+    document.getElementById('chat-icon').textContent = isOpen ? '💬' : '×';
+    document.getElementById('chat-notif').style.display = 'none';
+  }
+
+  // ── EXISTING FUNCTIONS ──
   function toast(msg) {
     document.getElementById('toast-msg').textContent = msg;
     const t = document.getElementById('success-toast');
@@ -1197,7 +1512,12 @@
       toast('⚠️  Please fill in all required fields.');
       return;
     }
+    // Calculate a mock price
+    const miles = Math.floor(Math.random() * 20) + 5;
+    const price = (miles * 3.5).toFixed(2);
+    document.getElementById('ride-total').textContent = '$' + price;
     toast('🚐  Booking received! Dispatch will confirm within 30 minutes.');
+    setTimeout(() => openPaymentModal(), 1500);
   }
 
   function submitContact() {
@@ -1210,19 +1530,28 @@
     toast('✉️  Message sent! We\'ll respond within 1 business day.');
   }
 
-  // Fade-in on scroll
+  // ── SCROLL ANIMATIONS ──
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.service-card, .pricing-card, .contact-channel').forEach(el => {
+  document.querySelectorAll('.service-card, .pricing-card, .contact-channel, .coverage-card').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(24px)';
     el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s';
     observer.observe(el);
   });
+
+  // ── CLOSE MODALS ON ESC ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closePhoneModal();
+      closePaymentModal();
+    }
+  });
 </script>
+
 </body>
 </html>
