@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClearPath NEMT — Non-Emergency Medical Transport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY5sv5PJMtIO0drLDiMdAKNiGf2N7H9x4&libraries=places" async defer></script>
+<style>
+  :root {
+    --navy: #0b1f3a;
+    --navy-mid: #122a50;
+    --teal: #00b4a0;
+    --teal-light: #00d4bc;
+    --cream: #f5f0e8;
+    --warm-white: #fdfaf4;
+    --amber: #e8a020;
+    --slate: #4a6080;
+    --light-slate: #8aa0b8;
+    --card-bg: #ffffff;
+    --shadow: 0 8px 40px rgba(11,31,58,0.12);
+    --shadow-lg: 0 20px 60px rgba(11,31,58,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--navy);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(11,31,58,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,180,160,0.2);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo {
+    font-family: 'Libre Baskerville', serif;
+    color: var(--cream);
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--teal); }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    color: var(--light-slate);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+  .nav-cta {
+    background: var(--teal);
+    color: var(--navy) !important;
+    padding: 9px 22px;
+    border-radius: 100px;
+    font-weight: 600 !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .nav-cta:hover { background: var(--teal-light) !important; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    background: var(--navy);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,160,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,160,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,180,160,0.15) 0%, transparent 70%);
+    right: -100px; top: 50%; transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,180,160,0.12);
+    border: 1px solid rgba(0,180,160,0.3);
+    color: var(--teal);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before { content: "●"; font-size: 0.5rem; }
+  h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 em { color: var(--teal); font-style: italic; }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--light-slate);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--teal);
+    color: var(--navy);
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+    border: none; cursor: pointer; font-family: inherit;
+  }
+  .btn-primary:hover { background: var(--teal-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,180,160,0.35); }
+  .btn-outline {
+    background: transparent;
+    color: var(--cream);
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid rgba(245,240,232,0.25);
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 56px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .hero-stat h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2rem;
+    color: var(--cream);
+  }
+  .hero-stat h3 span { color: var(--teal); }
+  .hero-stat p { font-size: 0.8rem; color: var(--light-slate); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+  /* Hero Right - Map Visual */
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .map-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(0,180,160,0.2);
+    border-radius: 24px;
+    padding: 28px;
+    width: 100%; max-width: 420px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .map-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,180,160,0.08) 0%, transparent 60%);
+    border-radius: inherit;
+  }
+  .map-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+  }
+  .map-title { color: var(--cream); font-weight: 600; font-size: 0.9rem; }
+  .live-badge {
+    background: rgba(0,180,160,0.15);
+    color: var(--teal);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid rgba(0,180,160,0.3);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  .map-bg {
+    background: #0d2540;
+    border-radius: 12px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .map-roads {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,160,0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,160,0.12) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .map-vehicle {
+    position: absolute;
+    width: 14px; height: 14px;
+    background: var(--teal);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(0,180,160,0.25), 0 0 20px rgba(0,180,160,0.5);
+  }
+  .v1 { top: 40%; left: 30%; animation: move1 4s ease-in-out infinite alternate; }
+  .v2 { top: 60%; left: 55%; animation: move2 5s ease-in-out infinite alternate; }
+  .v3 { top: 25%; left: 65%; animation: move3 3.5s ease-in-out infinite alternate; }
+  .map-dest {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: var(--amber);
+    border-radius: 2px;
+    transform: rotate(45deg);
+    box-shadow: 0 0 12px rgba(232,160,32,0.5);
+  }
+  .d1 { bottom: 30%; left: 70%; }
+  .d2 { top: 20%; left: 20%; }
+
+  .dispatch-info {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .dispatch-chip {
+    background: rgba(0,180,160,0.08);
+    border: 1px solid rgba(0,180,160,0.15);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .dispatch-chip .label { font-size: 0.7rem; color: var(--light-slate); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .dispatch-chip .value { font-size: 1.1rem; font-weight: 700; color: var(--cream); }
+  .dispatch-chip .value span { color: var(--teal); font-size: 0.8rem; font-weight: 400; }
+
+  /* ── TRUST STRIP ── */
+  .trust-strip {
+    background: var(--cream);
+    border-top: 1px solid rgba(11,31,58,0.08);
+    border-bottom: 1px solid rgba(11,31,58,0.08);
+    padding: 24px 5%;
+    display: flex; align-items: center; justify-content: center; gap: 60px;
+    flex-wrap: wrap;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.85rem;
+    color: var(--slate);
+    font-weight: 500;
+  }
+  .trust-icon {
+    width: 36px; height: 36px;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1.2;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  h2 em { font-style: italic; color: var(--teal); }
+  .section-sub {
+    font-size: 1rem;
+    color: var(--slate);
+    line-height: 1.7;
+    max-width: 560px;
+    font-weight: 300;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--warm-white); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 56px;
+  }
+  .service-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(11,31,58,0.08);
+    border-radius: 20px;
+    padding: 36px 32px;
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+    cursor: default;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--teal);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    width: 52px; height: 52px;
+    background: var(--navy);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+  .service-card h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+  }
+  .service-card p { font-size: 0.9rem; color: var(--slate); line-height: 1.65; }
+
+  /* ── PRICING ── */
+  #pricing { background: var(--navy); position: relative; overflow: hidden; }
+  #pricing::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,180,160,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,160,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  #pricing .section-label { color: var(--teal); }
+  #pricing h2 { color: var(--cream); }
+  #pricing .section-sub { color: var(--light-slate); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+    position: relative; z-index: 1;
+  }
+  .pricing-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(0,180,160,0.15);
+    border-radius: 24px;
+    padding: 40px 32px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .pricing-card.featured {
+    background: var(--teal);
+    border-color: var(--teal);
+    position: relative;
+    transform: scale(1.04);
+  }
+  .pricing-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--amber);
+    color: var(--navy);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    padding: 5px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .pricing-card:not(.featured):hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+  .plan-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--light-slate);
+    margin-bottom: 16px;
+  }
+  .pricing-card.featured .plan-name { color: rgba(11,31,58,0.7); }
+  .price {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+  .pricing-card.featured .price { color: var(--navy); }
+  .price sup { font-size: 1.4rem; vertical-align: top; margin-top: 8px; }
+  .price-note { font-size: 0.8rem; color: var(--light-slate); margin-bottom: 28px; }
+  .pricing-card.featured .price-note { color: rgba(11,31,58,0.6); }
+  .price-desc {
+    font-size: 0.875rem;
+    color: var(--light-slate);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .pricing-card.featured .price-desc { color: rgba(11,31,58,0.75); }
+  .price-features { list-style: none; margin-bottom: 36px; }
+  .price-features li {
+    padding: 10px 0;
+    font-size: 0.875rem;
+    color: var(--light-slate);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pricing-card.featured .price-features li { color: rgba(11,31,58,0.8); border-bottom-color: rgba(11,31,58,0.1); }
+  .price-features li::before { content: "✓"; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+  .pricing-card.featured .price-features li::before { color: var(--navy); }
+  .btn-pricing {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    background: transparent;
+    border: 1px solid rgba(0,180,160,0.4);
+    color: var(--teal);
+    cursor: pointer;
+    font-family: inherit;
+    width: 100%;
+  }
+  .btn-pricing:hover { background: rgba(0,180,160,0.1); }
+  .pricing-card.featured .btn-pricing {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--teal);
+  }
+  .pricing-card.featured .btn-pricing:hover { background: var(--navy-mid); }
+
+  /* ── BOOK ── */
+  #book { background: var(--warm-white); }
+  .book-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 60px;
+  }
+  .book-info h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+  }
+  .book-info p { color: var(--slate); font-size: 0.9rem; line-height: 1.7; margin-bottom: 28px; }
+  .book-feature {
+    display: flex; align-items: flex-start; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .book-feature-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--navy);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .book-feature h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+  .book-feature p { font-size: 0.82rem; color: var(--slate); margin: 0; }
+
+  /* ── FORM ── */
+  .booking-form {
+    background: var(--card-bg);
+    border: 1px solid rgba(11,31,58,0.08);
+    border-radius: 24px;
+    padding: 44px 40px;
+    box-shadow: var(--shadow);
+  }
+  .form-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.35rem;
+    margin-bottom: 6px;
+  }
+  .form-sub { font-size: 0.85rem; color: var(--slate); margin-bottom: 32px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid rgba(11,31,58,0.12);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--navy);
+    background: var(--warm-white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,180,160,0.12);
+  }
+  .form-group textarea { height: 100px; resize: vertical; }
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+  .vehicle-options {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin-top: 4px;
+  }
+  .vehicle-opt input { display: none; }
+  .vehicle-opt label {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 14px 8px;
+    border: 1.5px solid rgba(11,31,58,0.12);
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    text-align: center;
+    gap: 6px;
+    background: var(--warm-white);
+  }
+  .vehicle-opt label span { font-size: 1.4rem; }
+  .vehicle-opt input:checked + label {
+    border-color: var(--teal);
+    background: rgba(0,180,160,0.06);
+    color: var(--teal);
+  }
+  .vehicle-opt label:hover { border-color: var(--teal); }
+  .form-submit {
+    width: 100%;
+    padding: 16px;
+    border-radius: 100px;
+    background: var(--navy);
+    color: var(--cream);
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .form-submit:hover { background: var(--teal); color: var(--navy); transform: translateY(-1px); }
+  .form-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--light-slate);
+    margin-top: 14px;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--cream); }
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 56px;
+    align-items: start;
+  }
+  .contact-channels { display: flex; flex-direction: column; gap: 20px; }
+  .contact-channel {
+    background: var(--card-bg);
+    border: 1px solid rgba(11,31,58,0.08);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex; align-items: center; gap: 20px;
+    transition: box-shadow 0.2s;
+  }
+  .contact-channel:hover { box-shadow: var(--shadow); }
+  .contact-channel-icon {
+    width: 50px; height: 50px;
+    background: var(--navy);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .contact-channel h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--slate); font-weight: 600; margin-bottom: 6px; }
+  .contact-channel p { font-size: 1rem; font-weight: 600; color: var(--navy); }
+  .contact-channel small { display: block; font-size: 0.78rem; color: var(--slate); margin-top: 2px; }
+
+  .contact-form {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 44px 40px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(11,31,58,0.08);
+  }
+  .contact-form h3 { font-family: 'Libre Baskerville', serif; font-size: 1.3rem; margin-bottom: 6px; }
+  .contact-form p { font-size: 0.85rem; color: var(--slate); margin-bottom: 28px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 60px 5% 40px;
+    border-top: 1px solid rgba(0,180,160,0.15);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand p { font-size: 0.85rem; color: var(--light-slate); line-height: 1.7; margin-top: 16px; max-width: 280px; }
+  .footer-col h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--cream);
+    margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a { color: var(--light-slate); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--teal); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem;
+    color: var(--light-slate);
+  }
+  .footer-bottom a { color: var(--light-slate); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--teal); }
+
+  /* ── ALERT ── */
+  #success-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--teal);
+    color: var(--navy);
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 999;
+    box-shadow: 0 8px 30px rgba(0,180,160,0.4);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(.17,.67,.32,1.2);
+    display: flex; align-items: center; gap: 10px;
+  }
+  #success-toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  @keyframes move1 {
+    0% { top: 40%; left: 30%; }
+    100% { top: 50%; left: 45%; }
+  }
+  @keyframes move2 {
+    0% { top: 60%; left: 55%; }
+    100% { top: 45%; left: 65%; }
+  }
+  @keyframes move3 {
+    0% { top: 25%; left: 65%; }
+    100% { top: 35%; left: 50%; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #home { grid-template-columns: 1fr; padding-top: 100px; }
+    .hero-visual { display: none; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-card.featured { transform: scale(1); }
+    .book-layout, .contact-layout, .footer-top { grid-template-columns: 1fr; gap: 40px; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="logo-icon">🚐</div>
+    Clear<span>Path</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#map-section">Map</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#book">Book a Ride</a></li>
+    <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🛡️ &nbsp;Licensed & Insured NEMT Provider</div>
+    <h1>Medical transport you can <em>trust</em>, every ride</h1>
+    <p class="hero-sub">Professional non-emergency medical transportation for dialysis, doctor appointments, therapy, and more. On-time, door-to-door, and always caring.</p>
+    <div class="hero-actions">
+      <a href="#book" class="btn-primary">📅 &nbsp;Book a Ride</a>
+      <button class="btn-outline" onclick="showPhoneModal()" style="border:none;cursor:pointer;">📞 &nbsp;Call Dispatch</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <h3>98<span>%</span></h3>
+        <p>On-Time Rate</p>
+      </div>
+      <div class="hero-stat">
+        <h3>24<span>/7</span></h3>
+        <p>Dispatch</p>
+      </div>
+      <div class="hero-stat">
+        <h3>12K<span>+</span></h3>
+        <p>Trips Monthly</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-title">Live Fleet Dispatch</div>
+        <div class="live-badge"><div class="live-dot"></div>Live</div>
+      </div>
+      <div class="map-bg">
+        <div class="map-roads"></div>
+        <div class="map-vehicle v1"></div>
+        <div class="map-vehicle v2"></div>
+        <div class="map-vehicle v3"></div>
+        <div class="map-dest d1"></div>
+        <div class="map-dest d2"></div>
+      </div>
+      <div class="dispatch-info">
+        <div class="dispatch-chip">
+          <div class="label">Active Vehicles</div>
+          <div class="value">24 <span>online</span></div>
+        </div>
+        <div class="dispatch-chip">
+          <div class="label">Avg ETA</div>
+          <div class="value">12 <span>min</span></div>
+        </div>
+        <div class="dispatch-chip">
+          <div class="label">Today's Trips</div>
+          <div class="value">186 <span>done</span></div>
+        </div>
+        <div class="dispatch-chip">
+          <div class="label">Satisfaction</div>
+          <div class="value">4.9 <span>⭐</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item"><div class="trust-icon">🏥</div>Medicaid & Medicare Accepted</div>
+  <div class="trust-item"><div class="trust-icon">🔒</div>HIPAA Compliant</div>
+  <div class="trust-item"><div class="trust-icon">🚑</div>Wheelchair & Stretcher Ready</div>
+  <div class="trust-item"><div class="trust-icon">🌙</div>24/7 Scheduling</div>
+  <div class="trust-item"><div class="trust-icon">📍</div>Door-to-Door Service</div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">Our Services</div>
+  <h2>Specialized transport for every <em>medical need</em></h2>
+  <p class="section-sub">From routine check-ups to recurring dialysis appointments, we match you with the right vehicle and the right care.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">♿</div>
+      <h3>Wheelchair Transport</h3>
+      <p>ADA-compliant vehicles with hydraulic lifts and secure tie-downs, ensuring safe and comfortable transport for wheelchair users.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛏️</div>
+      <h3>Stretcher Service</h3>
+      <p>Full gurney-capable transport with trained attendants for patients who cannot sit upright. Ideal for post-surgery recovery.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💊</div>
+      <h3>Dialysis Runs</h3>
+      <p>Dedicated recurring-appointment fleet with consistent drivers who know your schedule and your facility, every time.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏃</div>
+      <h3>Ambulatory Transport</h3>
+      <p>For patients who can walk with assistance. Comfortable sedans and minivans with door-to-door escort service.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">👴</div>
+      <h3>Senior Care Transport</h3>
+      <p>Patient, courteous drivers trained in senior care protocols. Extra time for boarding, with hand-to-hand escort.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏛️</div>
+      <h3>Facility Contracts</h3>
+      <p>Volume agreements for assisted living centers, hospitals, and rehab facilities. Priority dispatch and dedicated accounts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section id="coverage" style="background:var(--navy);padding:100px 5%;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,180,160,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,160,0.04) 1px,transparent 1px);background-size:40px 40px;"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="section-label">Service Coverage</div>
+    <h2 style="color:var(--cream);">Proudly serving <em>Southeast Michigan</em></h2>
+    <p class="section-sub" style="color:var(--light-slate);margin-bottom:56px;">Based in Michigan, we provide reliable non-emergency medical transport across these communities — with local drivers who know every route.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🏙️</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Detroit</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Full city coverage including hospital districts, clinics, and dialysis centers throughout Metro Detroit.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🌆</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Dearborn</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Serving Dearborn and Dearborn Heights with multilingual drivers familiar with local medical facilities.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🏘️</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Livonia</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Complete coverage across Livonia including St. Mary Mercy Hospital and surrounding care centers.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🍁</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Ann Arbor</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Dedicated routes to University of Michigan Health and other major Ann Arbor medical campuses.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🏡</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Canton</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Reliable transport throughout Canton Township to local clinics, specialists, and therapy centers.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🌳</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Farmington Hills</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Serving Farmington Hills and Farmington with prompt pickup and experienced care-focused drivers.</p>
+      </div>
+      <div class="coverage-card" style="background:var(--navy-mid);border:1px solid rgba(0,180,160,0.15);border-radius:20px;padding:32px 28px;transition:all 0.3s;cursor:default;">
+        <div style="font-size:2rem;margin-bottom:14px;">🌊</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--cream);font-size:1.2rem;margin-bottom:8px;">Monroe</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;">Extended service to Monroe County, connecting patients to regional hospitals and specialty care.</p>
+      </div>
+      <div class="coverage-card" style="background:rgba(0,180,160,0.08);border:1px solid rgba(0,180,160,0.3);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:14px;">📍</div>
+        <h3 style="font-family:'Libre Baskerville',serif;color:var(--teal);font-size:1.1rem;margin-bottom:8px;">Don't see your city?</h3>
+        <p style="color:var(--light-slate);font-size:0.85rem;line-height:1.6;margin-bottom:16px;">We may still be able to help. Call us and we'll check availability in your area.</p>
+        <button onclick="showPhoneModal()" class="btn-primary" style="font-size:0.85rem;padding:10px 22px;border:none;cursor:pointer;">📞 Call Us</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">Transparent Pricing</div>
+  <h2>Simple rates, <em>no surprises</em></h2>
+  <p class="section-sub">All plans include fully licensed drivers, clean vehicles, and real-time trip tracking. Insurance billing available for all tiers.</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Standard</div>
+      <div class="price"><sup>$</sup>3.50</div>
+      <div class="price-note">per mile · minimum $18</div>
+      <div class="price-desc">Ideal for occasional rides to appointments, labs, and outpatient visits.</div>
+      <ul class="price-features">
+        <li>Ambulatory sedan transport</li>
+        <li>24-hr advance booking</li>
+        <li>SMS ride confirmation</li>
+        <li>HIPAA-trained drivers</li>
+        <li>Basic insurance billing</li>
+      </ul>
+      <button class="btn-pricing" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">Book a Ride</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-name">Priority</div>
+      <div class="price"><sup>$</sup>5.25</div>
+      <div class="price-note">per mile · minimum $28</div>
+      <div class="price-desc">For recurring appointments and patients who need a little extra care and consistency.</div>
+      <ul class="price-features">
+        <li>All vehicle types available</li>
+        <li>Dedicated recurring driver</li>
+        <li>Real-time GPS tracking</li>
+        <li>Family notification alerts</li>
+        <li>Priority dispatch queue</li>
+        <li>Full insurance billing</li>
+      </ul>
+      <button class="btn-pricing" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">Book a Ride</button>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Facility</div>
+      <div class="price">Custom</div>
+      <div class="price-note">volume contracts · billed monthly</div>
+      <div class="price-desc">Designed for hospitals, clinics, and long-term care facilities with recurring high-volume needs.</div>
+      <ul class="price-features">
+        <li>Dedicated fleet assignment</li>
+        <li>Account manager on-call</li>
+        <li>API dispatch integration</li>
+        <li>Monthly billing & reports</li>
+        <li>SLA-guaranteed ETAs</li>
+        <li>Medicaid bulk billing</li>
+      </ul>
+      <button class="btn-pricing" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get a Quote</button>
+    </div>
+  </div>
+</section>
+
+<!-- BOOK -->
+<section id="book">
+  <div class="section-label">Book a Ride</div>
+  <h2>Schedule your transport <em>in minutes</em></h2>
+  <div class="book-layout">
+    <div class="book-info">
+      <p>Fill out the form and our dispatch team will confirm your booking within 30 minutes. For same-day rides, please call us directly.</p>
+      <div class="book-feature">
+        <div class="book-feature-icon">⚡</div>
+        <div>
+          <h4>Fast Confirmation</h4>
+          <p>Booking confirmed by phone or SMS within 30 minutes of submission.</p>
+        </div>
+      </div>
+      <div class="book-feature">
+        <div class="book-feature-icon">🗺️</div>
+        <div>
+          <h4>Live Tracking</h4>
+          <p>Track your driver in real-time and share location with family members.</p>
+        </div>
+      </div>
+      <div class="book-feature">
+        <div class="book-feature-icon">🧾</div>
+        <div>
+          <h4>Insurance Billing</h4>
+          <p>We handle Medicaid and Medicare billing directly. No upfront payment needed for eligible rides.</p>
+        </div>
+      </div>
+      <div class="book-feature">
+        <div class="book-feature-icon">🔁</div>
+        <div>
+          <h4>Standing Orders</h4>
+          <p>Set up recurring trips for dialysis, chemo, or regular therapy sessions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-form">
+      <div class="form-title">Ride Booking Request</div>
+      <div class="form-sub">All fields marked * are required</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" placeholder="Jane" id="fname" name="first_name">
+        </div>
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input type="text" placeholder="Doe" id="lname" name="last_name">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" placeholder="(555) 000-0000" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" id="dob" name="dob">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Pickup Address *</label>
+        <input type="text" placeholder="123 Main Street, City, State, ZIP" id="pickup" name="pickup_address" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Destination Address *</label>
+        <input type="text" placeholder="Hospital, clinic, or facility name & address" id="dest" name="destination_address" autocomplete="off">
+      </div>
+
+      <!-- PRICE ESTIMATOR BOX -->
+      <div id="price-estimator" style="display:none;background:linear-gradient(135deg,#0b1f3a,#122a50);border-radius:14px;padding:18px 20px;margin-bottom:18px;border:1px solid rgba(0,180,160,0.3);">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;">💰 Live Price Estimate</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+          <div style="text-align:center;">
+            <div style="font-size:0.7rem;color:var(--light-slate);margin-bottom:4px;">Distance</div>
+            <div id="est-distance" style="font-size:1.2rem;font-weight:700;color:white;">—</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:0.7rem;color:var(--light-slate);margin-bottom:4px;">Duration</div>
+            <div id="est-duration" style="font-size:1.2rem;font-weight:700;color:white;">—</div>
+          </div>
+          <div style="text-align:center;background:rgba(0,180,160,0.15);border-radius:10px;padding:6px 4px;">
+            <div style="font-size:0.7rem;color:var(--teal);margin-bottom:4px;">Est. Price</div>
+            <div id="est-price" style="font-size:1.3rem;font-weight:700;color:var(--teal);">—</div>
+          </div>
+        </div>
+        <div id="est-note" style="font-size:0.72rem;color:var(--light-slate);margin-top:10px;text-align:center;"></div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Pickup Date *</label>
+          <input type="date" id="ride-date" name="ride_date">
+        </div>
+        <div class="form-group">
+          <label>Pickup Time *</label>
+          <input type="time" id="ride-time" name="ride_time">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Vehicle Type *</label>
+        <div class="vehicle-options">
+          <div class="vehicle-opt">
+            <input type="radio" name="vehicle" id="v-sedan" value="sedan" checked>
+            <label for="v-sedan"><span>🚗</span>Sedan</label>
+          </div>
+          <div class="vehicle-opt">
+            <input type="radio" name="vehicle" id="v-wc" value="wheelchair">
+            <label for="v-wc"><span>♿</span>Wheelchair</label>
+          </div>
+          <div class="vehicle-opt">
+            <input type="radio" name="vehicle" id="v-stretch" value="stretcher">
+            <label for="v-stretch"><span>🛏️</span>Stretcher</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Insurance / Member ID</label>
+        <input type="text" placeholder="Medicaid or Medicare ID (optional)" id="insurance" name="insurance_id">
+      </div>
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea placeholder="Oxygen required, extra time needed, flight of stairs at pickup, etc." name="special_instructions"></textarea>
+      </div>
+      <!-- Hidden field to store estimated price -->
+      <input type="hidden" id="hidden-price" name="estimated_price" value="">
+      <input type="hidden" id="hidden-distance" name="distance" value="">
+
+      <button class="form-submit" onclick="submitBooking()">
+        📅 &nbsp; Request My Ride
+      </button>
+      <button class="form-submit" onclick="openPaymentModal()" style="margin-top:10px;background:var(--teal);color:var(--navy);">
+        💳 &nbsp; Pay for Ride
+      </button>
+      <p class="form-note">🔒 Your information is protected under HIPAA. We never share your data.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Contact Us</div>
+  <h2>We're here <em>around the clock</em></h2>
+  <p class="section-sub">Our dispatch team is available 24/7 for bookings, changes, and urgent requests. Reach us however is easiest for you.</p>
+  <div class="contact-layout">
+    <div class="contact-channels">
+      <div class="contact-channel">
+        <div class="contact-channel-icon">📞</div>
+        <div>
+          <h4>Main Dispatch Line</h4>
+          <p>+92 304 847 1034</p>
+          <small>Available 24 hours, 7 days a week</small>
+        </div>
+      </div>
+      <div class="contact-channel">
+        <div class="contact-channel-icon">💬</div>
+        <div>
+          <h4>SMS / Text</h4>
+          <p>+92 304 847 1034</p>
+          <small>For scheduling and ride status updates</small>
+        </div>
+      </div>
+      <div class="contact-channel">
+        <div class="contact-channel-icon">📧</div>
+        <div>
+          <h4>Email</h4>
+          <p>earninn@gmail.com</p>
+          <small>Billing, contracts & facility inquiries</small>
+        </div>
+      </div>
+      <div class="contact-channel">
+        <div class="contact-channel-icon">🏢</div>
+        <div>
+          <h4>Main Office</h4>
+          <p>Michigan, United States</p>
+          <small>Mon–Fri, 8:00 AM – 6:00 PM</small>
+        </div>
+      </div>
+      <div class="contact-channel">
+        <div class="contact-channel-icon">🤝</div>
+        <div>
+          <h4>Facility Partnerships</h4>
+          <p>earninn@gmail.com</p>
+          <small>Volume pricing and API integrations</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3>Send us a message</h3>
+      <p>For non-urgent inquiries, billing questions, or to request a facility quote.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Full name" id="c-name">
+        </div>
+        <div class="form-group">
+          <label>Organization</label>
+          <input type="text" placeholder="Hospital, clinic, or personal" id="c-org">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com" id="c-email">
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select id="c-subject">
+          <option value="">Select a topic…</option>
+          <option>General Inquiry</option>
+          <option>Billing & Insurance</option>
+          <option>Facility Partnership</option>
+          <option>Driver / Employment</option>
+          <option>Feedback or Complaint</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="How can we help you?" style="height:130px"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitContact()">
+        ✉️ &nbsp; Send Message
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- GOOGLE MAP SECTION -->
+<section id="map-section" style="padding:0;background:var(--cream);">
+  <div style="padding:80px 5% 40px;">
+    <div class="section-label">Find Us</div>
+    <h2>Our <em>service area</em> — Southeast Michigan</h2>
+    <p class="section-sub">We operate throughout the greater Detroit metro area. Use the map to explore our coverage zones.</p>
+  </div>
+  <div style="width:100%;height:480px;position:relative;">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d375612.4!2d-83.4!3d42.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8824ca0110cb1d75%3A0x5776864e35b9c4d2!2sDetroit%2C%20MI!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+      width="100%" height="480" style="border:0;display:block;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <div style="position:absolute;top:20px;left:20px;background:white;border-radius:14px;padding:16px 20px;box-shadow:0 4px 20px rgba(0,0,0,0.15);max-width:220px;">
+      <div style="font-weight:700;font-size:0.85rem;color:var(--navy);margin-bottom:10px;">📍 Coverage Cities</div>
+      <div style="font-size:0.78rem;color:var(--slate);line-height:1.9;">
+        🏙️ Detroit &nbsp;|&nbsp; 🏘️ Dearborn<br>
+        🌳 Livonia &nbsp;|&nbsp; 🍁 Ann Arbor<br>
+        🏡 Canton &nbsp;|&nbsp; 🌲 Farmington Hills<br>
+        🌊 Monroe
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#home" class="nav-logo" style="display:inline-flex;">
+        <div class="logo-icon">🚐</div>
+        Clear<span>Path</span>
+      </a>
+      <p>Compassionate, reliable non-emergency medical transport. Licensed, insured, and HIPAA-compliant across the region.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Wheelchair Transport</a></li>
+        <li><a href="#services">Stretcher Service</a></li>
+        <li><a href="#services">Dialysis Rides</a></li>
+        <li><a href="#services">Senior Transport</a></li>
+        <li><a href="#services">Facility Contracts</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About ClearPath</a></li>
+        <li><a href="#">Our Fleet</a></li>
+        <li><a href="#">Driver Careers</a></li>
+        <li><a href="#">Safety Standards</a></li>
+        <li><a href="#">Press & Media</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#contact">Contact Dispatch</a></li>
+        <li><a href="#">Insurance Billing</a></li>
+        <li><a href="#">Cancellation Policy</a></li>
+        <li><a href="#">HIPAA Notice</a></li>
+        <li><a href="#">Patient Rights</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 ClearPath NEMT. All rights reserved.</span>
+    <span style="display:flex;gap:20px;">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">HIPAA Notice</a>
+    </span>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div id="success-toast">✅ &nbsp; <span id="toast-msg">Request submitted! We'll confirm shortly.</span></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PHONE MODAL -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="phone-modal" style="display:none;position:fixed;inset:0;background:rgba(11,31,58,0.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+  <div style="background:white;border-radius:24px;padding:48px 40px;max-width:380px;width:90%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.3);position:relative;animation:fadeUp 0.3s ease;">
+    <button onclick="closePhoneModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--slate);">×</button>
+    <div style="font-size:3rem;margin-bottom:16px;">📞</div>
+    <h3 style="font-family:'Libre Baskerville',serif;font-size:1.4rem;margin-bottom:8px;color:var(--navy);">Call Our Dispatch</h3>
+    <p style="color:var(--slate);font-size:0.875rem;margin-bottom:24px;">Available 24 hours, 7 days a week</p>
+    <div style="background:var(--cream);border-radius:14px;padding:20px;margin-bottom:24px;">
+      <div style="font-size:1.8rem;font-weight:700;color:var(--navy);letter-spacing:0.02em;">+92 304 847 1034</div>
+      <div style="font-size:0.78rem;color:var(--slate);margin-top:6px;">Tap to copy or dial</div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <button onclick="copyPhone()" style="flex:1;padding:13px;border-radius:100px;background:var(--navy);color:white;border:none;font-weight:600;cursor:pointer;font-family:inherit;font-size:0.9rem;transition:background 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='var(--navy)'" onmouseout="this.style.background='var(--navy)';this.style.color='white'">📋 Copy Number</button>
+      <a href="tel:+923048471034" style="flex:1;padding:13px;border-radius:100px;background:var(--teal);color:var(--navy);text-decoration:none;font-weight:600;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background='#00d4bc'" onmouseout="this.style.background='var(--teal)'">📱 Dial Now</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAYMENT MODAL -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="payment-modal" style="display:none;position:fixed;inset:0;background:rgba(11,31,58,0.7);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="background:white;border-radius:24px;padding:44px 40px;max-width:480px;width:90%;box-shadow:0 30px 80px rgba(0,0,0,0.3);position:relative;animation:fadeUp 0.3s ease;margin:20px auto;">
+    <button onclick="closePaymentModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--slate);">×</button>
+    <div style="font-size:2.5rem;margin-bottom:12px;">💳</div>
+    <h3 style="font-family:'Libre Baskerville',serif;font-size:1.4rem;margin-bottom:6px;color:var(--navy);">Secure Payment</h3>
+    <p style="color:var(--slate);font-size:0.85rem;margin-bottom:28px;">Pay for your ride securely. All transactions are encrypted.</p>
+
+    <div style="background:var(--cream);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:0.8rem;color:var(--slate);">Ride Estimate</div>
+      <div style="font-weight:700;font-size:1.1rem;color:var(--navy);" id="ride-total">$28.00</div>
+    </div>
+
+    <div class="form-group">
+      <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Cardholder Name</label>
+      <input type="text" id="pay-name" placeholder="Jane Doe" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'">
+    </div>
+    <div class="form-group" style="margin-top:14px;">
+      <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Card Number</label>
+      <input type="text" id="pay-card" placeholder="1234 5678 9012 3456" maxlength="19" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'" oninput="formatCard(this)">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+      <div>
+        <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Expiry</label>
+        <input type="text" id="pay-exp" placeholder="MM / YY" maxlength="7" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'" oninput="formatExpiry(this)">
+      </div>
+      <div>
+        <label style="display:block;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">CVV</label>
+        <input type="text" id="pay-cvv" placeholder="123" maxlength="4" style="width:100%;padding:13px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:12px;font-size:0.9rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'">
+      </div>
+    </div>
+    <div style="background:rgba(0,180,160,0.06);border:1px solid rgba(0,180,160,0.2);border-radius:10px;padding:12px 16px;margin-top:18px;font-size:0.78rem;color:var(--slate);display:flex;align-items:center;gap:8px;">
+      🔒 Your payment info is encrypted and never stored on our servers.
+    </div>
+    <button onclick="processPayment()" style="width:100%;margin-top:20px;padding:16px;border-radius:100px;background:var(--navy);color:white;font-size:1rem;font-weight:600;font-family:inherit;border:none;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='var(--navy)'" onmouseout="this.style.background='var(--navy)';this.style.color='white'">
+      💳 &nbsp;Pay Securely
+    </button>
+    <p style="text-align:center;font-size:0.75rem;color:var(--light-slate);margin-top:12px;">Visa · Mastercard · Amex · Discover accepted</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- CHATBOT -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="chat-bubble" onclick="toggleChat()" style="position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 30px rgba(0,180,160,0.4);z-index:1500;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <span id="chat-icon">💬</span>
+  <div id="chat-notif" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#e74c3c;border-radius:50%;border:2px solid white;font-size:0.6rem;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;">1</div>
+</div>
+
+<div id="chat-window" style="display:none;position:fixed;bottom:100px;right:30px;width:360px;height:520px;background:white;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,0.2);z-index:1500;flex-direction:column;overflow:hidden;animation:fadeUp 0.3s ease;">
+  <!-- Chat Header -->
+  <div style="background:var(--navy);padding:18px 20px;display:flex;align-items:center;gap:12px;">
+    <div style="width:40px;height:40px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🚐</div>
+    <div style="flex:1;">
+      <div style="color:white;font-weight:600;font-size:0.95rem;">ClearPath Assistant</div>
+      <div style="color:var(--teal);font-size:0.75rem;display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;background:var(--teal);border-radius:50%;display:inline-block;animation:pulse 1.5s infinite;"></span>Online now</div>
+    </div>
+    <button onclick="toggleChat()" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.3rem;cursor:pointer;">×</button>
+  </div>
+  <!-- Chat Messages -->
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--warm-white);">
+    <div class="bot-msg" style="display:flex;gap:10px;align-items:flex-start;">
+      <div style="width:30px;height:30px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;">🚐</div>
+      <div style="background:white;border:1px solid rgba(11,31,58,0.08);border-radius:4px 16px 16px 16px;padding:12px 16px;font-size:0.875rem;color:var(--navy);max-width:80%;box-shadow:0 2px 8px rgba(0,0,0,0.06);line-height:1.5;">
+        Hi! 👋 I'm the ClearPath assistant. I can help you with booking, pricing, coverage areas, and more. What do you need?
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-left:40px;">
+      <button onclick="quickReply('What areas do you cover?')" style="background:white;border:1px solid rgba(0,180,160,0.3);border-radius:100px;padding:7px 14px;font-size:0.78rem;color:var(--teal);cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--teal)'">📍 Coverage areas</button>
+      <button onclick="quickReply('What are your prices?')" style="background:white;border:1px solid rgba(0,180,160,0.3);border-radius:100px;padding:7px 14px;font-size:0.78rem;color:var(--teal);cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--teal)'">💰 Pricing</button>
+      <button onclick="quickReply('How do I book a ride?')" style="background:white;border:1px solid rgba(0,180,160,0.3);border-radius:100px;padding:7px 14px;font-size:0.78rem;color:var(--teal);cursor:pointer;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--teal)'">📅 Book a ride</button>
+    </div>
+  </div>
+  <!-- Chat Input -->
+  <div style="padding:14px 16px;border-top:1px solid rgba(11,31,58,0.08);display:flex;gap:10px;background:white;">
+    <input id="chat-input" type="text" placeholder="Type your question…" style="flex:1;padding:10px 16px;border:1.5px solid rgba(11,31,58,0.12);border-radius:100px;font-size:0.875rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(11,31,58,0.12)'" onkeypress="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()" style="width:40px;height:40px;background:var(--teal);border:none;border-radius:50%;cursor:pointer;font-size:1rem;color:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;">➤</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PAY RIDE BUTTON (floating near book section) -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<script>
+  // ── PHONE MODAL ──
+  function showPhoneModal() {
+    const m = document.getElementById('phone-modal');
+    m.style.display = 'flex';
+  }
+  function closePhoneModal() {
+    document.getElementById('phone-modal').style.display = 'none';
+  }
+  function copyPhone() {
+    navigator.clipboard.writeText('+923048471034').then(() => {
+      toast('📋 Phone number copied to clipboard!');
+      closePhoneModal();
+    });
+  }
+  document.getElementById('phone-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePhoneModal();
+  });
+
+  // ── PAYMENT MODAL ──
+  function openPaymentModal() {
+    document.getElementById('payment-modal').style.display = 'flex';
+  }
+  function closePaymentModal() {
+    document.getElementById('payment-modal').style.display = 'none';
+  }
+  document.getElementById('payment-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePaymentModal();
+  });
+  function formatCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 2) v = v.substring(0, 2) + ' / ' + v.substring(2);
+    input.value = v;
+  }
+  function processPayment() {
+    const name = document.getElementById('pay-name').value.trim();
+    const card = document.getElementById('pay-card').value.trim();
+    const exp  = document.getElementById('pay-exp').value.trim();
+    const cvv  = document.getElementById('pay-cvv').value.trim();
+    if (!name || card.length < 19 || exp.length < 7 || cvv.length < 3) {
+      toast('⚠️ Please fill in all payment fields correctly.');
+      return;
+    }
+    closePaymentModal();
+    toast('✅ Payment successful! Booking confirmed.');
+  }
+
+  // ── CHATBOT ──
+  const botReplies = {
+    'what areas do you cover': '📍 We cover: <b>Detroit, Dearborn, Livonia, Ann Arbor, Canton, Farmington Hills,</b> and <b>Monroe</b> — all in Southeast Michigan!',
+    'coverage': '📍 We serve Detroit, Dearborn, Livonia, Ann Arbor, Canton, Farmington Hills, and Monroe, MI.',
+    'price': '💰 Standard rides start at <b>$3.50/mile</b> (min $18). Priority service is <b>$5.25/mile</b> (min $28). Facility contracts are custom-priced.',
+    'pricing': '💰 Standard: $3.50/mile · Priority: $5.25/mile · Facility: custom rates. All include licensed drivers and GPS tracking!',
+    'book': '📅 You can book online using the form on this page, or call us at <b>+92 304 847 1034</b>. We confirm within 30 minutes!',
+    'how do i book': '📅 Scroll up to the <b>Book a Ride</b> section and fill out the form — or call <b>+92 304 847 1034</b>!',
+    'phone': '📞 Our dispatch number is <b>+92 304 847 1034</b>, available 24/7.',
+    'number': '📞 Call us at <b>+92 304 847 1034</b> anytime — we\'re available 24 hours a day!',
+    'email': '📧 You can reach us at <b>earninn@gmail.com</b> for billing and inquiries.',
+    'wheelchair': '♿ Yes! We have ADA-compliant vehicles with hydraulic lifts and secure tie-downs for wheelchair users.',
+    'insurance': '🧾 We accept <b>Medicaid and Medicare</b>. We handle billing directly — no upfront payment needed for eligible rides.',
+    'medicaid': '🧾 Yes, we accept Medicaid! We bill directly on your behalf. Just provide your member ID when booking.',
+    'dialysis': '💊 We offer dedicated dialysis transport with consistent, familiar drivers. We can set up a recurring schedule for you.',
+    'hours': '🕐 Our dispatch is available <b>24/7</b>, including weekends and holidays.',
+    'michigan': '📍 Yes, we\'re based in Michigan and cover Southeast Michigan cities including Detroit, Dearborn, Ann Arbor, and more.',
+    'pay': '💳 You can pay by card using our secure payment form. Click the <b>Pay for Ride</b> button in the booking section.',
+    'payment': '💳 We accept Visa, Mastercard, Amex, and Discover. Insurance billing also available for eligible patients.',
+    'hello': '👋 Hello! How can I help you today? Ask me about pricing, coverage, booking, or anything else!',
+    'hi': '👋 Hi there! I\'m here to help. Ask me about our services, pricing, or how to book a ride.',
+    'default': '🤔 I\'m not sure about that — please call us at <b>+92 304 847 1034</b> or email <b>earninn@gmail.com</b> and we\'ll be happy to help!'
+  };
+
+  function getBotReply(msg) {
+    const lower = msg.toLowerCase();
+    for (const key in botReplies) {
+      if (lower.includes(key)) return botReplies[key];
+    }
+    return botReplies['default'];
+  }
+
+  function addMsg(text, isUser) {
+    const msgs = document.getElementById('chat-messages');
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `display:flex;gap:10px;align-items:flex-start;${isUser ? 'flex-direction:row-reverse;' : ''}`;
+    const avatar = document.createElement('div');
+    avatar.style.cssText = `width:30px;height:30px;background:${isUser ? 'var(--teal)' : 'var(--navy)'};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;`;
+    avatar.textContent = isUser ? '👤' : '🚐';
+    const bubble = document.createElement('div');
+    bubble.style.cssText = `background:${isUser ? 'var(--teal)' : 'white'};color:${isUser ? 'var(--navy)' : 'var(--navy)'};border:1px solid ${isUser ? 'var(--teal)' : 'rgba(11,31,58,0.08)'};border-radius:${isUser ? '16px 4px 16px 16px' : '4px 16px 16px 16px'};padding:12px 16px;font-size:0.875rem;max-width:80%;box-shadow:0 2px 8px rgba(0,0,0,0.06);line-height:1.5;`;
+    bubble.innerHTML = text;
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(bubble);
+    msgs.appendChild(wrapper);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function quickReply(text) {
+    addMsg(text, true);
+    document.getElementById('chat-notif').style.display = 'none';
+    setTimeout(() => addMsg(getBotReply(text), false), 600);
+  }
+
+  function sendChat() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addMsg(msg, true);
+    input.value = '';
+    document.getElementById('chat-notif').style.display = 'none';
+    setTimeout(() => addMsg(getBotReply(msg), false), 700);
+  }
+
+  function toggleChat() {
+    const w = document.getElementById('chat-window');
+    const isOpen = w.style.display === 'flex';
+    w.style.display = isOpen ? 'none' : 'flex';
+    w.style.flexDirection = 'column';
+    document.getElementById('chat-icon').textContent = isOpen ? '💬' : '×';
+    document.getElementById('chat-notif').style.display = 'none';
+  }
+
+  // ── EXISTING FUNCTIONS ──
+  function toast(msg) {
+    document.getElementById('toast-msg').textContent = msg;
+    const t = document.getElementById('success-toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  // ── GOOGLE MAPS AUTOCOMPLETE + DISTANCE PRICING ──
+  const RATES = { sedan: 3.50, wheelchair: 5.25, stretcher: 5.25 };
+  const MINIMUMS = { sedan: 18, wheelchair: 28, stretcher: 28 };
+  let distanceMiles = 0;
+
+  window.initMapsFeatures = function() {
+    const pickupInput = document.getElementById('pickup');
+    const destInput   = document.getElementById('dest');
+
+    const acOptions = { componentRestrictions: { country: 'us' }, fields: ['formatted_address', 'geometry'] };
+    const pickupAC = new google.maps.places.Autocomplete(pickupInput, acOptions);
+    const destAC   = new google.maps.places.Autocomplete(destInput, acOptions);
+
+    function calculateDistance() {
+      const p = pickupInput.value.trim();
+      const d = destInput.value.trim();
+      if (!p || !d) return;
+
+      const service = new google.maps.DistanceMatrixService();
+      service.getDistanceMatrix({
+        origins: [p],
+        destinations: [d],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.IMPERIAL
+      }, (response, status) => {
+        if (status !== 'OK') return;
+        const element = response.rows[0].elements[0];
+        if (element.status !== 'OK') return;
+
+        const distText = element.distance.text; // e.g. "12.4 mi"
+        const durText  = element.duration.text; // e.g. "22 mins"
+        distanceMiles  = parseFloat(distText.replace(/[^0-9.]/g, ''));
+
+        const vehicle  = document.querySelector('input[name="vehicle"]:checked').value;
+        const rate     = RATES[vehicle];
+        const min      = MINIMUMS[vehicle];
+        const price    = Math.max(distanceMiles * rate, min).toFixed(2);
+
+        document.getElementById('est-distance').textContent = distText;
+        document.getElementById('est-duration').textContent = durText;
+        document.getElementById('est-price').textContent    = '$' + price;
+        document.getElementById('est-note').textContent     = `${vehicle.charAt(0).toUpperCase()+vehicle.slice(1)} · $${rate}/mile · min $${min}`;
+        document.getElementById('hidden-price').value       = '$' + price;
+        document.getElementById('hidden-distance').value    = distText;
+        document.getElementById('ride-total').textContent   = '$' + price;
+        document.getElementById('price-estimator').style.display = 'block';
+      });
+    }
+
+    pickupAC.addListener('place_changed', calculateDistance);
+    destAC.addListener('place_changed', calculateDistance);
+
+    // Recalculate if vehicle type changes
+    document.querySelectorAll('input[name="vehicle"]').forEach(r => {
+      r.addEventListener('change', calculateDistance);
+    });
+  };
+
+  // Load autocomplete after maps API ready
+  if (window.google && window.google.maps) {
+    window.initMapsFeatures();
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      const check = setInterval(() => {
+        if (window.google && window.google.maps && window.google.maps.places) {
+          clearInterval(check);
+          window.initMapsFeatures();
+        }
+      }, 300);
+    });
+  }
+
+  // ── SUBMIT BOOKING → FORMSPREE ──
+  async function submitBooking() {
+    const fname  = document.getElementById('fname').value.trim();
+    const lname  = document.getElementById('lname').value.trim();
+    const phone  = document.getElementById('phone').value.trim();
+    const pickup = document.getElementById('pickup').value.trim();
+    const dest   = document.getElementById('dest').value.trim();
+    const date   = document.getElementById('ride-date').value;
+    const time   = document.getElementById('ride-time').value;
+
+    if (!fname || !phone || !pickup || !dest || !date || !time) {
+      toast('⚠️  Please fill in all required fields.');
+      return;
+    }
+
+    const vehicle  = document.querySelector('input[name="vehicle"]:checked').value;
+    const dob      = document.getElementById('dob').value;
+    const insurance= document.getElementById('insurance').value.trim();
+    const notes    = document.querySelector('textarea[name="special_instructions"]').value.trim();
+    const price    = document.getElementById('hidden-price').value || 'Not calculated';
+    const distance = document.getElementById('hidden-distance').value || 'Not calculated';
+
+    const payload = {
+      'Patient Name':       `${fname} ${lname}`,
+      'Phone':              phone,
+      'Date of Birth':      dob || 'Not provided',
+      'Pickup Address':     pickup,
+      'Destination':        dest,
+      'Ride Date':          date,
+      'Ride Time':          time,
+      'Vehicle Type':       vehicle,
+      'Estimated Distance': distance,
+      'Estimated Price':    price,
+      'Insurance ID':       insurance || 'Not provided',
+      'Special Instructions': notes || 'None',
+      '_subject':           `🚐 New NEMT Booking — ${fname} ${lname}`
+    };
+
+    try {
+      toast('📤 Submitting your booking...');
+      const res = await fetch('https://formspree.io/f/mzdykgvy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        toast('🚐 Booking received! Check earninn@gmail.com for confirmation.');
+        if (price !== 'Not calculated') {
+          document.getElementById('ride-total').textContent = price;
+          setTimeout(() => openPaymentModal(), 1500);
+        }
+      } else {
+        toast('⚠️ Submission failed. Please call us directly.');
+      }
+    } catch(e) {
+      toast('⚠️ Network error. Please call +92 304 847 1034.');
+    }
+  }
+
+  async function submitContact() {
+    const name    = document.getElementById('c-name').value.trim();
+    const org     = document.getElementById('c-org').value.trim();
+    const email   = document.getElementById('c-email').value.trim();
+    const subject = document.getElementById('c-subject').value;
+    const msg     = document.querySelector('.contact-form textarea').value.trim();
+
+    if (!name || !email) {
+      toast('⚠️  Please enter your name and email.');
+      return;
+    }
+    const payload = {
+      'Name': name, 'Organization': org || 'N/A',
+      'Email': email, 'Subject': subject || 'General',
+      'Message': msg || 'No message',
+      '_subject': `📧 Contact Form — ${subject || 'Inquiry'} from ${name}`
+    };
+    try {
+      toast('📤 Sending your message...');
+      const res = await fetch('https://formspree.io/f/mzdykgvy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      res.ok ? toast('✉️ Message sent! We\'ll respond within 1 business day.') : toast('⚠️ Failed to send. Please email earninn@gmail.com directly.');
+    } catch(e) {
+      toast('⚠️ Network error. Please email us directly.');
+    }
+  }
+
+  // ── SCROLL ANIMATIONS ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .pricing-card, .contact-channel, .coverage-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s';
+    observer.observe(el);
+  });
+
+  // ── CLOSE MODALS ON ESC ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closePhoneModal();
+      closePaymentModal();
+    }
+  });
+</script>
+
+</body>
+</html>
